@@ -1,0 +1,36 @@
+# 通用
+.DS_Store
+*.log
+*.tmp
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.venv/
+venv/
+.envrc
+
+# 数据/模型/检查点
+data*/
+vision_index/
+datasets/
+outputs/
+runs/
+checkpoints/
+models/
+*.pt
+*.bin
+*.ckpt
+*.onnx
+*.tar
+*.gz
+*.zip
+*.npz
+*.npy
+
+# Jupyter/缓存
+.ipynb_checkpoints/
+.cache/
