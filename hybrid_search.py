@@ -34,6 +34,7 @@ class HybridSearcher:
     def __init__(self, chunks: List[Dict[str, Any]], text_search_fn, vision_index_dir: str = "./vision_index"):
         self.chunks = chunks
         self.text_search_fn = text_search_fn
+        self.index_dir = os.path.abspath(vision_index_dir)
 
         # Build BM25 over chunk texts
         self._bm25_corpus = []
@@ -43,10 +44,10 @@ class HybridSearcher:
         self.bm25 = BM25Okapi(self._bm25_corpus)
 
         # Load vision meta & lookup to attach image_path
-        self.vision_meta = _load_meta(vision_index_dir)
+        self.vision_meta = _load_meta(self.index_dir)
         self.lookup = {}
         if self.vision_meta:
-            lp = os.path.join(vision_index_dir, self.vision_meta.get("lookup_path", "lookup.json"))
+            lp = os.path.join(self.index_dir, self.vision_meta.get("lookup_path", "lookup.json"))
             if os.path.exists(lp):
                 try:
                     self.lookup = json.load(open(lp, "r", encoding="utf-8"))
@@ -64,7 +65,7 @@ class HybridSearcher:
             item = dict(item)
             item["file_name"] = fn
             item["page"] = int(pg)
-            item["image_path"] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "vision_index", rel)
+            item["image_path"] = os.path.join(self.index_dir, rel)
         else:
             # 保底也补齐 file_name/page 字段，方便后续使用
             item = dict(item)
